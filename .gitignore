@@ -162,3 +162,7 @@ dist
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/node,visualstudiocode
+
+# 除外する別モジュール
+
+/assets/bootstrap

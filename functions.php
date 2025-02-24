@@ -3,9 +3,7 @@
 function vardump($var)
 {
 ?>
-  <pre>
-    <?php var_dump($var); ?>
-  </pre>
+  <pre><?php var_dump($var); ?></pre>
 <?php
 }
 
@@ -27,17 +25,25 @@ add_action('after_setup_theme', 'activate_essential_features');
 
 function enqueue_bootstrap_for_front()
 {
+  $cssSubPath = 'assets/bootstrap/dist/index.css';
+  $jsSubPath = 'assets/bootstrap/dist/index.js';
+
+  if (!file_exists(get_theme_file_path($cssSubPath)) || !file_exists(get_theme_file_path($jsSubPath))) {
+    return;
+  }
+
   wp_enqueue_style(
     'bootstrap',
-    get_template_directory_uri() . '/assets/bootstrap/dist/index.css',
+    get_template_directory_uri() . '/' . $cssSubPath,
     [],
-    filemtime(get_theme_file_path('assets/bootstrap/dist/index.css'))
+    filemtime(get_theme_file_path($cssSubPath))
   );
+
   wp_enqueue_script(
     'bootstrap',
-    get_template_directory_uri() . '/assets/bootstrap/dist/index.js',
+    get_template_directory_uri() . '/' . $jsSubPath,
     [],
-    filemtime(get_theme_file_path('assets/bootstrap/dist/index.js'))
+    filemtime(get_theme_file_path($jsSubPath)),
   );
 }
 add_action('wp_enqueue_scripts', 'enqueue_bootstrap_for_front');
