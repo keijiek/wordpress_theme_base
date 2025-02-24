@@ -29,6 +29,7 @@ function enqueue_bootstrap_for_front()
   $jsSubPath = 'assets/bootstrap/dist/index.js';
 
   if (!file_exists(get_theme_file_path($cssSubPath)) || !file_exists(get_theme_file_path($jsSubPath))) {
+    throw new Exception('Bootstrap files not found');
     return;
   }
 
