@@ -1,0 +1,35 @@
+{
+  "name": "wp-theme-base",
+  "host": "",
+  "protocol": "ftp",
+  "port": 21,
+  "username": "",
+  "password": "",
+  "remotePath": "/",
+  "uploadOnSave": false,
+  "useTempFile": false,
+  "openSsh": false,
+  "syncOption": {
+    "delete": true,
+    "skipCreate": false,
+    "ignoreExisting": false,
+    "update": false
+  },
+  "watcher": {
+    "files": "assets/dist/**/*",
+    "autoUpload": true,
+    "autoDelete": false
+  },
+  "ignore": [
+    "node_modules",
+    ".git",
+    ".DS_Store",
+    ".env",
+    ".vscode/*",
+    "!.vscode/settings.json",
+    "!.vscode/tasks.json",
+    "!.vscode/launch.json",
+    "!.vscode/extensions.json",
+    "!.vscode/*.code-snippets"
+  ]
+}
