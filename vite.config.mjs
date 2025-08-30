@@ -11,7 +11,7 @@ export default defineConfig({
     manifest: true,
     rollupOptions: {
       input: {
-        front: path.resolve(__dirname, "assets/src/main.js"),
+        disted: path.resolve(__dirname, "assets/src/main.js"),
       },
       output: {
         entryFileNames: `[name].js`,
