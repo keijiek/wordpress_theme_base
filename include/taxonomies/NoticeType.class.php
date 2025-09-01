@@ -17,17 +17,7 @@ class NoticeType extends TaxonomyBase
   {
     parent::__construct();
 
-    add_filter('manage_edit-notices_columns', function ($columns) {
-      // 例: 2番目の位置に「お知らせタイプ」カラムを挿入
-      $new = [];
-      foreach ($columns as $key => $value) {
-        $new[$key] = $value;
-        if ($key === 'title') {
-          $new['taxonomy-notice_type'] = 'お知らせタイプ';
-        }
-      }
-      return $new;
-    });
+    // add_filter('manage_edit-notices_columns', [$this, 'manageColumnCallback']);
   }
 
   public function register_taxonomy(): void

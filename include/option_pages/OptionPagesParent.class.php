@@ -2,10 +2,13 @@
 
 namespace include\option_pages;
 
-class OptionPageRegister
+use include\option_pages\pages\OptionPrimaryPage;
+use include\option_pages\pages\AddressAndContact;
+
+class OptionPagesParent
 {
-  // オプション画面のスラグ
-  const SLUG = 'site_settings';
+  // オプションの第一ページのスラグ
+  const PARENT_PAGE_SLUG = 'site_settings';
 
   // 権限
   const CAPABILITY = 'manage_options';
@@ -15,10 +18,24 @@ class OptionPageRegister
 
   public function __construct()
   {
-    add_action('admin_menu', [$this, 'addOptionPage']);
+    new OptionPrimaryPage(
+      self::PARENT_PAGE_SLUG,
+      self::PARENT_PAGE_SLUG,
+      OptionPrimaryPage::LABEL,
+      self::CAPABILITY,
+      1
+    );
+    new AddressAndContact(
+      self::PARENT_PAGE_SLUG,
+      AddressAndContact::PAGE_SLUG,
+      AddressAndContact::LABEL,
+      AddressAndContact::CAPABILITY,
+      2
+    );
+    // add_action('admin_menu', [$this, 'addOptionPage']);
     // add_action('admin_init', [$this, 'registerSettings']);
-    new \include\option_pages\SubPage01(self::SLUG, 1);
-    new \include\option_pages\SubOptionPage01(self::SLUG, 2);
+    // new \include\option_pages\SubPage01(self::PARENT_PAGE_SLUG, 1);
+    // new \include\option_pages\SubOptionPage01(self::PARENT_PAGE_SLUG, 2);
   }
 
   public function addOptionPage(): void
@@ -28,7 +45,7 @@ class OptionPageRegister
       '共通設定画面',
       '共通設定',
       self::CAPABILITY,
-      self::SLUG,
+      self::PARENT_PAGE_SLUG,
       [$this, 'optionPageRenderer'],
       'dashicons-admin-generic',
       21
@@ -55,7 +72,7 @@ class OptionPageRegister
       'location_section',
       '所在地情報',
       [$this, 'locationSectionCallback'],
-      self::SLUG
+      self::PARENT_PAGE_SLUG
     );
 
 
@@ -65,7 +82,7 @@ class OptionPageRegister
       'address_field',
       '住所',
       [$this, 'addressFieldCallback'],
-      self::SLUG,
+      self::PARENT_PAGE_SLUG,
       'location_section'
     );
 
@@ -74,7 +91,7 @@ class OptionPageRegister
       'map_embed_field',
       'Google Map埋め込みコード',
       [$this, 'mapEmbedFieldCallback'],
-      self::SLUG,
+      self::PARENT_PAGE_SLUG,
       'location_section'
     );
   }
@@ -215,7 +232,7 @@ class OptionPageRegister
         settings_fields('site_location_group');
 
         // セクションとフィールドを出力
-        do_settings_sections(self::SLUG);
+        do_settings_sections(self::PARENT_PAGE_SLUG);
 
         // 送信ボタン
         submit_button('設定を保存');
