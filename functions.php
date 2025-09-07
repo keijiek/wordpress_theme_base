@@ -1,5 +1,7 @@
 <?php
 
+use function PHPSTORM_META\type;
+
 function vardump(mixed $var)
 {
 ?>
@@ -28,7 +30,7 @@ new \include\config\ScriptsEnqueuer();
 new \include\config\NavMenuRegister();
 
 // デフォルト投稿タイプの無効化
-new \include\config\DefaultPostRemover();
+// new \include\config\DefaultPostRemover();
 
 /**
  * include\option_pages
@@ -46,6 +48,9 @@ new \include\post_types\Notices();
 
 // お知らせ用タクソノミー
 new \include\taxonomies\NoticeType();
+
+// 写真投稿タイプ
+new \include\post_types\Photos();
 
 
 /**

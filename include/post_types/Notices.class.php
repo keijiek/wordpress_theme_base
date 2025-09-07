@@ -38,6 +38,7 @@ class Notices extends PostTypeBase
   public function __construct()
   {
     parent::__construct();
+    $this->addCustomFields();
   }
 
   /**
@@ -118,5 +119,67 @@ class Notices extends PostTypeBase
     }
     // ターム(配列)をjoinして表示
     return $terms ? esc_html(implode(', ', wp_list_pluck($terms, 'name'))) : '-';
+  }
+
+  private function addCustomFields()
+  {
+    add_action('add_meta_boxes', [$this, 'addCustomMetaBox']);
+    add_action('save_post_' . self::SLUG, [$this, 'saveCustomFields']);
+    add_filter('rest_prepare_' . self::SLUG, [$this, 'addCustomFieldsToRestJson'], 10, 3);
+  }
+
+  public function addCustomMetaBox()
+  {
+    add_meta_box(
+      'notice_text_field',           // ID
+      'お知らせテキスト',            // タイトル
+      [$this, 'renderInputField'],   // コールバック
+      self::SLUG,                      // 投稿タイプ（「お知らせ」のスラッグ）
+      'normal',                      // 表示位置
+      'high'                         // 優先度
+    );
+  }
+
+  public function renderInputField($post)
+  {
+    $value = get_post_meta($post->ID, 'notice_text', true);
+?>
+    <label for="notice_text">テキスト:</label>
+    <input
+      type="text"
+      id="notice_text"
+      name="notice_text"
+      value="<?php echo esc_attr($value); ?>"
+      style="width:100%;" />
+<?php
+  }
+
+  public function saveCustomFields($post_id)
+  {
+    // セキュリティチェック
+    if (!isset($_POST['notice_text'])) {
+      return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+      return;
+    }
+
+    // カスタムフィールドの保存
+    update_post_meta(
+      $post_id,
+      'notice_text',
+      sanitize_text_field($_POST['notice_text'])
+    );
+  }
+
+  public function addCustomFieldsToRestJson($response, $post, $request)
+  {
+    // カスタムフィールドの値を取得
+    $notice_text = get_post_meta($post->ID, 'notice_text', true);
+
+    // レスポンスに追加
+    $response->data['notice_text'] = $notice_text;
+
+    return $response;
   }
 }
